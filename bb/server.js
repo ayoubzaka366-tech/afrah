@@ -3,18 +3,28 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
-// Find Chrome for whatsapp-web.js (puppeteer@24 nested dep)
-const chromeDir = path.join(os.homedir(), '.cache', 'puppeteer', 'chrome');
+// Find Chrome for whatsapp-web.js
+const possibleChrome = [
+  process.env.CHROME_PATH,
+  process.env.PUPPETEER_EXECUTABLE_PATH,
+  '/usr/bin/chromium-browser',
+  '/usr/bin/chromium',
+  '/usr/bin/google-chrome',
+  '/usr/bin/google-chrome-stable',
+];
 try {
-  const dirs = fs.readdirSync(chromeDir).sort().reverse();
-  for (const d of dirs) {
-    const candidate = path.join(chromeDir, d, 'chrome-win64', 'chrome.exe');
-    if (fs.existsSync(candidate)) {
-      process.env.PUPPETEER_EXECUTABLE_PATH = candidate;
-      break;
+  const chromeDir = path.join(os.homedir(), '.cache', 'puppeteer', 'chrome');
+  if (fs.existsSync(chromeDir)) {
+    const dirs = fs.readdirSync(chromeDir).sort().reverse();
+    for (const d of dirs) {
+      const candidate = path.join(chromeDir, d, 'chrome-win64', 'chrome.exe');
+      if (fs.existsSync(candidate)) { possibleChrome.unshift(candidate); break; }
     }
   }
 } catch {}
+for (const p of possibleChrome) {
+  if (p && fs.existsSync(p)) { process.env.PUPPETEER_EXECUTABLE_PATH = p; break; }
+}
 
 const cors = require('cors');
 
