@@ -44,11 +44,14 @@ Merci de nous avoir choisis ! ✨
 📝 *Notes :* ${order.notes || 'Aucune'}
 🕐 *Date commande :* ${order.created_at?.slice(0, 16) || ''}
 
-🔗 Voir dans l'admin : http://localhost:3000/admin/orders`;
+🔗 Voir dans l'admin : https://afrah-production.up.railway.app/admin/orders`;
 
           const sent = await whatsapp.sendMessage(order.phone, clientMsg);
           if (!sent) {
-            await whatsapp.sendMessage('0679990934', adminMsg);
+            db.get('SELECT admin_whatsapp FROM settings WHERE id = 1', (_, row) => {
+              const adminPhone = row?.admin_whatsapp || '0679990934';
+              whatsapp.sendMessage(adminPhone, adminMsg);
+            });
           }
         }
       });

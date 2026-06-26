@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
       const adminPhone = (row && row.admin_whatsapp) || '';
 
       const customerMsg = `Bonjour ${customer_name} 🙏\n\nNous avons bien reçu votre commande pour *${productTitle}* (${productPrice} DH).\n\nRépondez à ce message pour nous dire :\n1️⃣ Je confirme la commande\n2️⃣ Je veux un devis\n3️⃣ J'ai des questions\n\nMerci ! 🤗`;
-      const adminMsg = `🛍️ *Nouvelle commande* #${orderId}\n\n*Produit :* ${productTitle}\n*Prix :* ${productPrice} DH\n*Client :* ${customer_name}\n*Tél :* ${phone}${address ? `\n*Adresse :* ${address}` : ''}`;
+      const adminMsg = `🛍️ *Nouvelle commande* #${orderId}\n\n*Produit :* ${productTitle}\n*Prix :* ${productPrice} DH\n*Client :* ${customer_name}\n*Tél :* ${phone}${address ? `\n*Adresse :* ${address}` : ''}\n\n🔗 https://afrah-production.up.railway.app/admin/product-orders`;
 
       const imagePath = productImage ? path.join(__dirname, '..', 'uploads', 'products', productImage) : null;
       const hasImage = productImage && require('fs').existsSync(imagePath);
