@@ -20,19 +20,36 @@ router.post('/', (req, res) => {
 
       db.get(`SELECT o.*, p.title as package_title FROM orders o LEFT JOIN packages p ON o.package_id = p.id WHERE o.id = ?`, [orderId], async (err, order) => {
         if (!err && order) {
-          const clientMsg = `Bonjour ${order.customer_name} 🙏
+          const clientMsg = `━━━━━━━━━━━━━━━━━━━━━━
+✨ *AFRAH - Confirmation* ✨
+━━━━━━━━━━━━━━━━━━━━━━
 
-Nous avons bien reçu votre réservation #${order.id} pour *${order.package_title || 'Non spécifié'}* (${order.event_date || 'Date non spécifiée'}).
+Bonjour ${order.customer_name} 👋
 
-Répondez à ce message pour nous dire :
-1️⃣ Je confirme la réservation
-2️⃣ Je veux un devis
-3️⃣ J'ai des questions
+Nous avons le plaisir de vous confirmer la réception de votre réservation *N°${order.id}*.
 
-Merci ! 🤗
-*Afrah - Mariage & Événements*`;
+📌 *Récapitulatif :*
+┣ 📦 *Forfait* : ${order.package_title || 'Non spécifié'}
+┣ 📅 *Date* : ${order.event_date || 'Non spécifiée'}
+┗ 📍 *Adresse* : ${order.address || 'Non renseignée'}
 
-          const adminMsg = `🆕 *Nouvelle commande #${order.id}*
+━━━━━━━━━━━━━━━━━━━━━━
+Merci de nous répondre par un simple chiffre :
+━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣ *Je confirme* ma réservation
+2️⃣ *Je souhaite* un devis détaillé
+3️⃣ *J'ai* des questions supplémentaires
+
+━━━━━━━━━━━━━━━━━━━━━━
+*Afrah - Mariage & Événements* ✨
+━━━━━━━━━━━━━━━━━━━━━━`;
+
+          const adminMsg = `━━━━━━━━━━━━━━━━━━━━━━
+🆕 *NOUVELLE RÉSERVATION* 🆕
+━━━━━━━━━━━━━━━━━━━━━━
+
+*N°${order.id}*
 
 👤 *Client :* ${order.customer_name}
 📞 *Téléphone :* ${order.phone}
@@ -42,7 +59,9 @@ Merci ! 🤗
 📝 *Notes :* ${order.notes || 'Aucune'}
 🕐 *Date commande :* ${order.created_at?.slice(0, 16) || ''}
 
-🔗 Voir dans l'admin : https://afrah-production.up.railway.app/admin/orders`;
+━━━━━━━━━━━━━━━━━━━━━━
+🔗 https://afrah-production.up.railway.app/admin/orders
+━━━━━━━━━━━━━━━━━━━━━━`;
 
           const sent = await whatsapp.sendMessage(order.phone, clientMsg);
           if (!sent) {
