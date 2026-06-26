@@ -1,0 +1,9 @@
+{
+  "name": "afrah",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd fff && npm install && npm run build && cd ../bb && npm install",
+    "start": "cd bb && node server.js"
+  }
+}
