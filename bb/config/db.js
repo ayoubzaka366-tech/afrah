@@ -168,6 +168,41 @@ db.serialize(() => {
 
   const hash = bcrypt.hashSync('admin123', 10);
   db.run(`INSERT OR IGNORE INTO users (name, email, password) VALUES (?, ?, ?)`, ['Admin', 'admin@afrah.com', hash]);
+
+  db.get(`SELECT COUNT(*) as c FROM categories`, (_, r) => {
+    if (r && r.c === 0) {
+      db.run(`INSERT INTO categories (title, description) VALUES ('Mariage', 'Cérémonie de mariage')`);
+      db.run(`INSERT INTO categories (title, description) VALUES ('Mariage tunisien', 'Mariage traditionnel tunisien')`);
+      db.run(`INSERT INTO categories (title, description) VALUES ('Fiançailles', 'Cérémonie de fiançailles')`);
+      db.run(`INSERT INTO categories (title, description) VALUES ('Anniversaire', 'Fête d\'anniversaire')`);
+    }
+  });
+
+  db.get(`SELECT COUNT(*) as c FROM packages`, (_, r) => {
+    if (r && r.c === 0) {
+      db.run(`INSERT INTO packages (title, price, description) VALUES ('Forfait Or', 25000, 'Forfait premium avec tous les services')`);
+      db.run(`INSERT INTO packages (title, price, description) VALUES ('Forfait Argent', 15000, 'Forfait moyen avec services essentiels')`);
+      db.run(`INSERT INTO packages (title, price, description) VALUES ('Forfait Bronze', 8000, 'Forfait économique')`);
+    }
+  });
+
+  db.get(`SELECT COUNT(*) as c FROM product_categories`, (_, r) => {
+    if (r && r.c === 0) {
+      db.run(`INSERT INTO product_categories (title) VALUES ('Déco artisanale')`);
+      db.run(`INSERT INTO product_categories (title) VALUES ('Cadeaux personnalisés')`);
+      db.run(`INSERT INTO product_categories (title) VALUES ('Accessoires mariage')`);
+      db.run(`INSERT INTO product_categories (title) VALUES ('Pâtisserie orientale')`);
+    }
+  });
+
+  db.get(`SELECT COUNT(*) as c FROM products`, (_, r) => {
+    if (r && r.c === 0) {
+      db.run(`INSERT INTO products (category_id, title, price, description) VALUES (1, 'Centre de table', 150, 'Magnifique centre de table artisanal')`);
+      db.run(`INSERT INTO products (category_id, title, price, description) VALUES (1, 'Guirlande lumineuse', 200, 'Guirlande LED pour décoration')`);
+      db.run(`INSERT INTO products (category_id, title, price, description) VALUES (2, 'Cadre photo personnalisé', 120, 'Cadre avec vos noms et date')`);
+      db.run(`INSERT INTO products (category_id, title, price, description) VALUES (3, 'Coussin de mariage', 250, 'Coussin élégant pour alliance')`);
+    }
+  });
 });
 
 module.exports = db;
