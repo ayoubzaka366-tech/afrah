@@ -20,18 +20,16 @@ router.post('/', (req, res) => {
 
       db.get(`SELECT o.*, p.title as package_title FROM orders o LEFT JOIN packages p ON o.package_id = p.id WHERE o.id = ?`, [orderId], async (err, order) => {
         if (!err && order) {
-          const clientMsg = `✅ *Confirmation de réservation #${order.id}*
+          const clientMsg = `Bonjour ${order.customer_name} 🙏
 
-Bonjour ${order.customer_name} 👋
+Nous avons bien reçu votre réservation #${order.id} pour *${order.package_title || 'Non spécifié'}* (${order.event_date || 'Date non spécifiée'}).
 
-Votre réservation a bien été reçue ! Voici un récapitulatif :
+Répondez à ce message pour nous dire :
+1️⃣ Je confirme la réservation
+2️⃣ Je veux un devis
+3️⃣ J'ai des questions
 
-📅 *Date :* ${order.event_date || 'Non spécifiée'}
-📦 *Forfait :* ${order.package_title || 'Non spécifié'}
-
-Notre équipe vous contactera très bientôt pour confirmer tous les détails.
-
-Merci de nous avoir choisis ! ✨
+Merci ! 🤗
 *Afrah - Mariage & Événements*`;
 
           const adminMsg = `🆕 *Nouvelle commande #${order.id}*
